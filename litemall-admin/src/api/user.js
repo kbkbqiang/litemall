@@ -8,19 +8,11 @@ export function fetchList(query) {
   })
 }
 
-export function createUser(data) {
-  return request({
-    url: '/user/create',
-    method: 'post',
-    data
-  })
-}
-
-export function readUser(data) {
+export function userDetail(id) {
   return request({
     url: '/user/detail',
     method: 'get',
-    data
+    params: {id}
   })
 }
 
@@ -71,4 +63,3 @@ export function listHistory(query) {
     params: query
   })
 }
-

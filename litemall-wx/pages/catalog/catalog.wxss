@@ -29,11 +29,8 @@ page {
   justify-content: center;
 }
 
-.search .icon {
-  background: url(http://yanxuan.nosdn.127.net/hxm/yanxuan-wap/p/20161201/style/img/icon-normal/search2-2fb94833aa.png) center no-repeat;
-  background-size: 100%;
-  width: 28rpx;
-  height: 28rpx;
+.search .van-icon-search {
+  line-height: 56rpx;
 }
 
 .search .txt {
@@ -68,9 +65,9 @@ page {
 }
 
 .catalog .nav .item.active {
-  color: #AB956D;
+  color: #ab956d;
   font-size: 36rpx;
-  border-left: 6rpx solid #AB956D;
+  border-left: 6rpx solid #ab956d;
 }
 
 .catalog .cate {

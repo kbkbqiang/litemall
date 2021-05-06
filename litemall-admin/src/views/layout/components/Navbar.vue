@@ -1,33 +1,43 @@
 <template>
-  <el-menu class="navbar" mode="horizontal">
-    <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
+  <div class="navbar">
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
 
-    <breadcrumb class="breadcrumb-container"></breadcrumb>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+      <template v-if="device!=='mobile'">
 
-      <el-tooltip effect="dark" content="全屏" placement="bottom">
-        <screenfull class="screenfull right-menu-item"></screenfull>
-      </el-tooltip>
+        <el-tooltip content="全屏" effect="dark" placement="bottom">
+          <screenfull class="right-menu-item" />
+        </el-tooltip>
+
+        <el-tooltip content="布局大小" effect="dark" placement="bottom">
+          <size-select class="right-menu-item" />
+        </el-tooltip>
+
+        <el-tooltip content="通知中心" effect="dark" placement="bottom">
+          <notice class="right-menu-item" />
+        </el-tooltip>
+      </template>
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-          <i class="el-icon-caret-bottom"></i>
+          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <router-link to="/">
-              主页
-            </router-link>
-          </el-dropdown-item>
+          <router-link to="/">
+            <el-dropdown-item>
+              首页
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided>
-            <a target='_blank' href="https://github.com/linlinjava/litemall">
+            <a target="_blank" href="https://github.com/linlinjava/litemall">
               GitHub
             </a>
           </el-dropdown-item>
           <el-dropdown-item>
-            <a target='_blank' href="https://gitee.com/linlinjava/litemall">
+            <a target="_blank" href="https://gitee.com/linlinjava/litemall">
               码云
             </a>
           </el-dropdown-item>
@@ -36,13 +46,13 @@
               密码修改
             </router-link>
           </el-dropdown-item>
-          <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">退出登录</span>
+          <el-dropdown-item divided @click.native="logout">
+            <span style="display:block;">退出</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-  </el-menu>
+  </div>
 </template>
 
 <script>
@@ -50,18 +60,23 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
+import SizeSelect from '@/components/SizeSelect'
+import Notice from '@/components/Notice'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Screenfull
+    Screenfull,
+    SizeSelect,
+    Notice
   },
   computed: {
     ...mapGetters([
       'sidebar',
       'name',
-      'avatar'
+      'avatar',
+      'device'
     ])
   },
   methods: {
@@ -70,7 +85,7 @@ export default {
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
-        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+        this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       })
     }
   }
@@ -104,9 +119,7 @@ export default {
     .right-menu-item {
       display: inline-block;
       margin: 0 8px;
-    }
-    .screenfull {
-      height: 20px;
+      vertical-align: top;
     }
     .avatar-container {
       height: 50px;

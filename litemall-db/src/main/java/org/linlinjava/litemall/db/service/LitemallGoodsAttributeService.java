@@ -1,6 +1,5 @@
 package org.linlinjava.litemall.db.service;
 
-import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallGoodsAttributeMapper;
 import org.linlinjava.litemall.db.domain.LitemallGoodsAttribute;
 import org.linlinjava.litemall.db.domain.LitemallGoodsAttributeExample;
@@ -35,5 +34,14 @@ public class LitemallGoodsAttributeService {
         LitemallGoodsAttributeExample example = new LitemallGoodsAttributeExample();
         example.or().andGoodsIdEqualTo(gid);
         goodsAttributeMapper.logicalDeleteByExample(example);
+    }
+
+    public void deleteById(Integer id) {
+        goodsAttributeMapper.logicalDeleteByPrimaryKey(id);
+    }
+
+    public void updateById(LitemallGoodsAttribute attribute) {
+        attribute.setUpdateTime(LocalDateTime.now());
+        goodsAttributeMapper.updateByPrimaryKeySelective(attribute);
     }
 }

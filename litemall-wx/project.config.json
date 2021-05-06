@@ -5,12 +5,26 @@
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"uglifyFileName": true,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		},
+		"nodeModules": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.9.93",
+	"libVersion": "2.4.0",
 	"appid": "wxa5b486c6b918ecfb",
 	"projectname": "litemall-wx",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -27,8 +41,12 @@
 		"game": {
 			"list": []
 		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
 		"miniprogram": {
-			"current": 34,
+			"current": 22,
 			"list": [
 				{
 					"id": -1,
@@ -163,9 +181,9 @@
 					"query": "orderId=2&type=0&valueId=1116011"
 				},
 				{
-					"id": -1,
+					"id": 22,
 					"name": "我的优惠券",
-					"pathName": "pages/ucenter/coupon/coupon",
+					"pathName": "pages/ucenter/couponList/couponList",
 					"query": ""
 				},
 				{
@@ -239,6 +257,59 @@
 					"name": "团购专区",
 					"pathName": "pages/groupon/grouponList/grouponList",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "选择优惠券",
+					"pathName": "pages/ucenter/couponSelect/couponSelect",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "我的优惠券列表",
+					"pathName": "pages/ucenter/couponList/couponList",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "优惠券列表",
+					"pathName": "pages/coupon/coupon",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "帮助中心",
+					"pathName": "pages/help/help",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的团购",
+					"pathName": "pages/groupon/myGroupon/myGroupon",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "申请售后",
+					"pathName": "pages/ucenter/aftersale/aftersale",
+					"query": "id=2",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "售后列表",
+					"pathName": "pages/ucenter/aftersaleList/aftersaleList",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "售后详情",
+					"pathName": "pages/ucenter/aftersaleDetail/aftersaleDetail",
+					"query": "id=1",
+					"scene": null
 				}
 			]
 		}

@@ -19,8 +19,15 @@ public class NotifyService {
     private SmsSender smsSender;
     private List<Map<String, String>> smsTemplate = new ArrayList<>();
 
-    private WxTemplateSender wxTemplateSender;
     private List<Map<String, String>> wxTemplate = new ArrayList<>();
+
+    public boolean isMailEnable() {
+        return mailSender != null;
+    }
+
+    public boolean isSmsEnable() {
+        return smsSender != null;
+    }
 
     /**
      * 短信消息通知
@@ -30,7 +37,7 @@ public class NotifyService {
      */
     @Async
     public void notifySms(String phoneNumber, String message) {
-        if (mailSender == null)
+        if (smsSender == null)
             return;
 
         smsSender.send(phoneNumber, message);
@@ -44,18 +51,17 @@ public class NotifyService {
      * @param params      通知模版内容里的参数，类似"您的验证码为{1}"中{1}的值
      */
     @Async
-    public boolean notifySmsTemplate(String phoneNumber, NotifyType notifyType, String[] params) {
-        if (smsSender == null)
-            return false;
-
-        String templateIdStr = getTemplateId(notifyType, smsTemplate);
-        if (templateIdStr == null){
-            return false;
+    public void notifySmsTemplate(String phoneNumber, NotifyType notifyType, String[] params) {
+        if (smsSender == null) {
+            return;
         }
 
-        int templateId = Integer.parseInt(templateIdStr);
-        smsSender.sendWithTemplate(phoneNumber, templateId, params);
-        return true;
+        String templateIdStr = getTemplateId(notifyType, smsTemplate);
+        if (templateIdStr == null) {
+            return;
+        }
+
+        smsSender.sendWithTemplate(phoneNumber, templateIdStr, params);
     }
 
     /**
@@ -70,46 +76,7 @@ public class NotifyService {
         if (smsSender == null)
             return null;
 
-        int templateId = Integer.parseInt(getTemplateId(notifyType, smsTemplate));
-
-        return smsSender.sendWithTemplate(phoneNumber, templateId, params);
-    }
-
-    /**
-     * 微信模版消息通知,不跳转
-     * <p>
-     * 该方法会尝试从数据库获取缓存的FormId去发送消息
-     *
-     * @param touser     接收者openId
-     * @param notifyType 通知类别，通过该枚举值在配置文件中获取相应的模版ID
-     * @param params     通知模版内容里的参数，类似"您的验证码为{1}"中{1}的值
-     */
-    @Async
-    public void notifyWxTemplate(String touser, NotifyType notifyType, String[] params) {
-        if (wxTemplateSender == null)
-            return;
-
-        String templateId = getTemplateId(notifyType, wxTemplate);
-        wxTemplateSender.sendWechatMsg(touser, templateId, params);
-    }
-
-    /**
-     * 微信模版消息通知，带跳转
-     * <p>
-     * 该方法会尝试从数据库获取缓存的FormId去发送消息
-     *
-     * @param touser     接收者openId
-     * @param notifyType 通知类别，通过该枚举值在配置文件中获取相应的模版ID
-     * @param params     通知模版内容里的参数，类似"您的验证码为{1}"中{1}的值
-     * @param page       点击消息跳转的页面
-     */
-    @Async
-    public void notifyWxTemplate(String touser, NotifyType notifyType, String[] params, String page) {
-        if (wxTemplateSender == null)
-            return;
-
-        String templateId = getTemplateId(notifyType, wxTemplate);
-        wxTemplateSender.sendWechatMsg(touser, templateId, params, page);
+        return smsSender.sendWithTemplate(phoneNumber, getTemplateId(notifyType, smsTemplate), params);
     }
 
     /**
@@ -142,57 +109,25 @@ public class NotifyService {
         return null;
     }
 
-//    public MailSender getMailSender() {
-//        return mailSender;
-//    }
-
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }
-
-//    public String getSendFrom() {
-//        return sendFrom;
-//    }
 
     public void setSendFrom(String sendFrom) {
         this.sendFrom = sendFrom;
     }
 
-//    public String getSendTo() {
-//        return sendTo;
-//    }
-
     public void setSendTo(String sendTo) {
         this.sendTo = sendTo;
     }
-
-//    public SmsSender getSmsSender() {
-//        return smsSender;
-//    }
 
     public void setSmsSender(SmsSender smsSender) {
         this.smsSender = smsSender;
     }
 
-//    public List<Map<String, String>> getSmsTemplate() {
-//        return smsTemplate;
-//    }
-
     public void setSmsTemplate(List<Map<String, String>> smsTemplate) {
         this.smsTemplate = smsTemplate;
     }
-
-//    public WxTemplateSender getWxTemplateSender() {
-//        return wxTemplateSender;
-//    }
-
-    public void setWxTemplateSender(WxTemplateSender wxTemplateSender) {
-        this.wxTemplateSender = wxTemplateSender;
-    }
-
-//    public List<Map<String, String>> getWxTemplate() {
-//        return wxTemplate;
-//    }
 
     public void setWxTemplate(List<Map<String, String>> wxTemplate) {
         this.wxTemplate = wxTemplate;

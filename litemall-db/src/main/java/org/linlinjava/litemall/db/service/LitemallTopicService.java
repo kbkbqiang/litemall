@@ -2,6 +2,7 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallTopicMapper;
+import org.linlinjava.litemall.db.domain.LitemallGroupon;
 import org.linlinjava.litemall.db.domain.LitemallTopic;
 import org.linlinjava.litemall.db.domain.LitemallTopic.Column;
 import org.linlinjava.litemall.db.domain.LitemallTopicExample;
@@ -82,21 +83,6 @@ public class LitemallTopicService {
         return topicMapper.selectByExampleWithBLOBs(example);
     }
 
-    public int countSelective(String title, String subtitle, Integer page, Integer size, String sort, String order) {
-        LitemallTopicExample example = new LitemallTopicExample();
-        LitemallTopicExample.Criteria criteria = example.createCriteria();
-
-        if (!StringUtils.isEmpty(title)) {
-            criteria.andTitleLike("%" + title + "%");
-        }
-        if (!StringUtils.isEmpty(subtitle)) {
-            criteria.andSubtitleLike("%" + subtitle + "%");
-        }
-        criteria.andDeletedEqualTo(false);
-
-        return (int) topicMapper.countByExample(example);
-    }
-
     public int updateById(LitemallTopic topic) {
         topic.setUpdateTime(LocalDateTime.now());
         LitemallTopicExample example = new LitemallTopicExample();
@@ -115,4 +101,12 @@ public class LitemallTopicService {
     }
 
 
+    public void deleteByIds(List<Integer> ids) {
+        LitemallTopicExample example = new LitemallTopicExample();
+        example.or().andIdIn(ids).andDeletedEqualTo(false);
+        LitemallTopic topic = new LitemallTopic();
+        topic.setUpdateTime(LocalDateTime.now());
+        topic.setDeleted(true);
+        topicMapper.updateByExampleSelective(topic, example);
+    }
 }

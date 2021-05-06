@@ -1,7 +1,7 @@
 spring:
   profiles:
     active: db, core, wx
-  message:
+  messages:
     encoding: UTF-8
 
 server:
@@ -14,3 +14,6 @@ logging:
     org.mybatis:  ERROR
     org.linlinjava.litemall.wx:  DEBUG
     org.linlinjava.litemall:  ERROR
+
+swagger:
+  production: false

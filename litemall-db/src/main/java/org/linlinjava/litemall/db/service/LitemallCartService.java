@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,6 +57,12 @@ public class LitemallCartService {
         return cartMapper.selectByPrimaryKey(id);
     }
 
+    public LitemallCart findById(Integer userId, Integer id) {
+        LitemallCartExample example = new LitemallCartExample();
+        example.or().andUserIdEqualTo(userId).andIdEqualTo(id).andDeletedEqualTo(false);
+        return cartMapper.selectOneByExample(example);
+    }
+
     public int updateCheck(Integer userId, List<Integer> idsList, Boolean checked) {
         LitemallCartExample example = new LitemallCartExample();
         example.or().andUserIdEqualTo(userId).andProductIdIn(idsList).andDeletedEqualTo(false);
@@ -77,10 +84,10 @@ public class LitemallCartService {
         LitemallCartExample example = new LitemallCartExample();
         LitemallCartExample.Criteria criteria = example.createCriteria();
 
-        if(!StringUtils.isEmpty(userId)){
+        if (!StringUtils.isEmpty(userId)) {
             criteria.andUserIdEqualTo(userId);
         }
-        if(!StringUtils.isEmpty(goodsId)){
+        if (!StringUtils.isEmpty(goodsId)) {
             criteria.andGoodsIdEqualTo(goodsId);
         }
         criteria.andDeletedEqualTo(false);
@@ -93,22 +100,24 @@ public class LitemallCartService {
         return cartMapper.selectByExample(example);
     }
 
-    public int countSelective(Integer userId, Integer goodsId, Integer page, Integer limit, String sort, String order) {
-        LitemallCartExample example = new LitemallCartExample();
-        LitemallCartExample.Criteria criteria = example.createCriteria();
-
-        if(userId != null){
-            criteria.andUserIdEqualTo(userId);
-        }
-        if(goodsId != null){
-            criteria.andGoodsIdEqualTo(goodsId);
-        }
-        criteria.andDeletedEqualTo(false);
-
-        return (int)cartMapper.countByExample(example);
-    }
-
     public void deleteById(Integer id) {
         cartMapper.logicalDeleteByPrimaryKey(id);
+    }
+
+    public boolean checkExist(Integer goodsId) {
+        LitemallCartExample example = new LitemallCartExample();
+        example.or().andGoodsIdEqualTo(goodsId).andCheckedEqualTo(true).andDeletedEqualTo(false);
+        return cartMapper.countByExample(example) != 0;
+    }
+
+    public void updateProduct(Integer id, String goodsSn, String goodsName, BigDecimal price, String url) {
+        LitemallCart cart = new LitemallCart();
+        cart.setPrice(price);
+        cart.setPicUrl(url);
+        cart.setGoodsSn(goodsSn);
+        cart.setGoodsName(goodsName);
+        LitemallCartExample example = new LitemallCartExample();
+        example.or().andProductIdEqualTo(id);
+        cartMapper.updateByExampleSelective(cart, example);
     }
 }
